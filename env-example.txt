@@ -1,0 +1,17 @@
+#ICDC
+TOKEN=''
+REFRESH_TOKEN=''
+API_URL=
+URL=
+x-miq-group=
+x-icdc-account=
+x-icdc-role=
+ICDC_USERNAME=
+ICDC_PASSWORD=
+API_URL=
+URL=
+# Telegram
+BOT_TOKEN=
+ADMIN_USERS=
+TECH_SUPPORT_USERS=
+PRESALES_USERS=
