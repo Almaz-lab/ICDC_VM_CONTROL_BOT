@@ -11,14 +11,14 @@ import logging
 import get_token
 import threading
 
-# Set up logging
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
-# Load environment variables
+
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 ADMIN_USERS = [int(x) for x in os.getenv("ADMIN_USERS", "").split(",") if x.strip()]
@@ -28,7 +28,7 @@ PRESALES_USERS = [int(x) for x in os.getenv("PRESALES_USERS", "").split(",") if 
 if not BOT_TOKEN:
     raise ValueError("BOT_TOKEN environment variable must be set")
 
-# Initialize the bot
+
 bot = telebot.TeleBot(BOT_TOKEN)
 
 def check_user_access(user_id):
@@ -54,10 +54,10 @@ def list_vms(message):
         
     try:
         logger.info(f"User {message.from_user.id} requested VM list")
-        # Show "loading" message
+       
         loading_msg = bot.send_message(message.chat.id, "Loading VMs, please wait...")
         
-        # Get VMs from the get_vms,get_presale_vms or get_tech_support_vms function
+        
         if message.from_user.id in TECH_SUPPORT_USERS:
             vms = get_tech_support_vms()
         elif message.from_user.id in PRESALES_USERS:
@@ -70,14 +70,14 @@ def list_vms(message):
             bot.edit_message_text("No VMs found.", message.chat.id, loading_msg.message_id)
             return
         
-        # Create inline keyboard with VM buttons
+        
         markup = types.InlineKeyboardMarkup(row_width=1)
         for vm in vms:
-            # Assuming each VM has a 'name' attribute - adjust as needed based on your VM data structure
+            
             vm_name = vm.get('name', 'Unknown VM')
             vm_id = vm.get('id', '')
             power_status = vm.get('power_status', '')
-            # Add color indicator based on power status
+            
             if power_status in ['starting', 'start_complete']:
                 vm_name = '🟢 ' + vm_name
             elif power_status in ['stopping', 'stop_complete']:
@@ -86,7 +86,7 @@ def list_vms(message):
             markup.add(button)
         
         logger.info(f"Found {len(vms)} VMs")
-        # Edit the loading message to show VM buttons
+        
         bot.edit_message_text(
             "Select a VM to view details:",
             message.chat.id,
@@ -106,7 +106,7 @@ def vm_callback(call):
     vm_id = call.data.split('_')[1]
     try:
         logger.info(f"User {call.from_user.id} requested details for VM {vm_id}")
-        # Get VMs again to find the selected one
+        
         if call.from_user.id in TECH_SUPPORT_USERS:
             vms = get_tech_support_vms()
         elif call.from_user.id in PRESALES_USERS:
@@ -116,10 +116,10 @@ def vm_callback(call):
         selected_vm = next((vm for vm in vms if str(vm.get('id', '')) == vm_id), None)
         
         if selected_vm:
-            # Format VM details
+            
             details = "VM Details:\n\n"
             for key, value in selected_vm.items():
-                if key != 'id':  # Skip id as it's already known
+                if key != 'id':  
                     details += f"{key}: {value}\n"
             
             # Create power control buttons
@@ -146,7 +146,7 @@ def power_callback(call):
         return
         
     try:
-        action, vm_id = call.data.split('_')[1:3]  # Split into ['power', 'on/off', 'vm_id']
+        action, vm_id = call.data.split('_')[1:3]  
         logger.info(f"Power action requested: {action} for VM {vm_id}")
         
         if call.from_user.id in TECH_SUPPORT_USERS:
@@ -171,12 +171,12 @@ def power_callback(call):
 
                 if action == 'on':
                     start_vm.start_vm(vm_id)
-                    # return message to user that start command was sent
+                    
                     bot.send_message(call.message.chat.id, f"Power on command was sent to virtual machine {selected_vm.get('name', 'Unknown')}")
                     
                 else:
                     stop_vm.stop_vm(vm_id)
-                    # return message to user that stop command was sent
+                    
                     bot.send_message(call.message.chat.id, f"Power off command was sent to virtual machine {selected_vm.get('name', 'Unknown')}")
                 
 
@@ -196,10 +196,9 @@ def return_to_vms_callback(call):
     list_vms(call.message)
     bot.answer_callback_query(call.id)
 
-# Start the bot
+
 if __name__ == "__main__":
     logger.info("Bot started")
-    # Start get_token.main() in a background thread
     token_thread = threading.Thread(target=get_token.main)
     token_thread.daemon = True
     token_thread.start()

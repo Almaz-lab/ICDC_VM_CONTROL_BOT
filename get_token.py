@@ -3,11 +3,11 @@ import time
 import requests
 from dotenv import load_dotenv, set_key
 
-# Загружаем .env
+
 ENV_FILE = ".env"
 load_dotenv(ENV_FILE)
 
-# Константы
+
 API_URL = os.getenv("API_URL")
 CLIENT_ID = "insights"
 USERNAME = os.getenv("ICDC_USERNAME", "your_username")
@@ -20,7 +20,7 @@ def get_token_via_refresh():
         "grant_type": "refresh_token",
 
         "refresh_token": refresh_token,
-        "scope": "openid profile email groups"  # Add scope to ensure proper group permissions
+        "scope": "openid profile email groups"  
     }
     response = requests.post(API_URL, data=data)
     if response.status_code == 200:
@@ -39,7 +39,7 @@ def get_token():
         "grant_type": "password",
         "username": USERNAME,
         "password": PASSWORD,
-        # "scope": "openid profile email groups"  # Add scope to ensure proper group permissions
+        
     }
     response = requests.post(API_URL, data=data)
     if response.status_code == 200:

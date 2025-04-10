@@ -5,7 +5,7 @@ import os
 from tabulate import tabulate
 
 def get_presale_vms():
-    load_dotenv()  # Укажите полный путь к файлу
+    load_dotenv()
     URL = os.getenv("URL")
     TOKEN = os.getenv("TOKEN").strip("'")
     x_miq_group = os.getenv("x-miq-group")

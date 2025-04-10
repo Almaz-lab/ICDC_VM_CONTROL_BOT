@@ -25,7 +25,7 @@ def start_vm(vm_id):
         "action": "start"
     }
     
-    # vm_id = input("Enter VM ID: ")
+    
     response = requests.post(f"{URL}/{vm_id}", headers=headers, json=data)
     
     if response.status_code == 200:
