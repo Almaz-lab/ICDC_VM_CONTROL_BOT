@@ -1,16 +1,25 @@
 #ICDC
+#Access and refresh Tokens
 TOKEN=''
 REFRESH_TOKEN=''
+#To Get Token
 API_URL=
+#To Communicate with Compute Service
 URL=
+#Header info
 x-miq-group=
 x-icdc-account=
 x-icdc-role=
+#Credentials
 ICDC_USERNAME=
 ICDC_PASSWORD=
 
 # Telegram
+#Telegram Bot Token
 BOT_TOKEN=
+#Telegram id of admin users who can access everything
 ADMIN_USERS=
+#Telegram id of teck support users who can access vm's with #techsupport comment in it
 TECH_SUPPORT_USERS=
+#Telegram id of presales users who can access vm's with #PRESALE comment in it
 PRESALES_USERS=
